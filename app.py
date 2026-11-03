@@ -3,13 +3,13 @@ import pandas as pd
 import pickle
 
 st.set_page_config(
-    page_title="Purchase Prediction",
+    page_title=" customer Purchase Prediction",
     layout = 'centered'
 )
 model = pickle.load(open('model.pkl','rb'))
 scaler = pickle.load(open('scaler.pkl','rb'))
 feature_columns = pickle.load(open('feature_columns.pkl','rb'))
-st.title('Social Network Ads')
+st.title('Social Network Ads prediction')
 st.subheader('Purchase Prediction')
 st.write(
     'Enter Customer Details to predict'
@@ -58,6 +58,8 @@ if st.button("Predict Purchase", type="primary"):
     input_scaled = scaler.transform(input_data)
 
     prediction = model.predict(input_scaled)[0]
+    probability = model.predict_proba(input_scaled)[0][1]
+
     st.divider()
     st.subheader("Prediction Result")
 
@@ -65,3 +67,4 @@ if st.button("Predict Purchase", type="primary"):
         st.success("The customer is likely to purchase the product!")
     else:
         st.info("The customer is unlikely to purchase the product.")
+    st.write("Purchase Probability: {:.2f}%".format(probability * 100))
